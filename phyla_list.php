@@ -15,8 +15,8 @@ if (!$result) {
     die("Query Failed:" . $db_connect->error);
 }
 
-while ($row = $result->fetch_assoc()) {
-echo "<h1>" . $row['phylum_name'] . "</h1>";
+ while ($row = $result->fetch_assoc()) {
+echo "<a href='phylum_details.php?id=" . $row['id'] . "'>" . $row['phylum_name'] . "</a>";
 echo "<p>" . $row['phylum_description'] . "</p>";
 echo "<hr>";
 }
