@@ -1,3 +1,7 @@
+/* ============================================================
+   RESET & DESIGN TOKENS
+   ============================================================ */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -24,15 +28,19 @@ body {
     padding: 20px;
 }
 
-.content-area {
-    font-family: var(--mono);
-    background-color: #ffffff;
-    color: #1a1a1a;
-}
 
-.image-container {
-    max-height: 300px;
+/* ============================================================
+   SHARED CHROME  (header.php / footer.php)
+   shell, topbar, search, nav, footer — on every page
+   ============================================================ */
+
+.shell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
     overflow: hidden;
+    margin: 0 auto;
+    max-width: 1100px;
 }
 
 .topbar {
@@ -85,7 +93,7 @@ body {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    border-radius: 16px;
+    border-radius: 2px;
     font-size: 9px;
     font-family: var(--mono);
     color: #999;
@@ -117,6 +125,39 @@ body {
     color: var(--text-primary);
 }
 
+
+.subnav a:hover {
+    color: var(--accent-amber);
+
+
+}
+
+.footer {
+    background: #1C1A14;
+    border-top: 1px solid #332e22;
+    padding: 8px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-id {
+    font-size: 10px;
+    color: #4a4232;
+    font-family: var(--mono);
+    letter-spacing: 0.06em;
+}
+
+
+/* ============================================================
+   LANDING PAGE — HERO
+   ============================================================ */
+
+.image-container {
+    max-height: 300px;
+    overflow: hidden;
+}
+
 .image-container {
     position: relative;
     height: 200px;
@@ -133,6 +174,14 @@ body {
     object-position: center;
 }
 
+.image-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.15) 100%);
+}
+
 .text-overlay {
     position: absolute;
     bottom: 0;
@@ -143,14 +192,6 @@ body {
     padding: 6px 10px;
     color: #ffffff;
     z-index: 2;
-}
-
-.image-container::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.15) 100%);
 }
 
 .eyebrow {
@@ -176,6 +217,11 @@ body {
     line-height: 1.6;
 }
 
+
+/* ============================================================
+   LANDING PAGE — QUICK-LOOK STATS BAR
+   ============================================================ */
+
 .quick-look {
     display: flex;
     background: #1C1A14;
@@ -195,13 +241,11 @@ body {
     flex-direction: column;
     border-right: 1px solid #2A2720;
     padding: 10px;
-
 }
 
 .stat-label {
     font-size: 12px;
     color: #463E2F;
-
 }
 
 .stat-value {
@@ -217,213 +261,10 @@ body {
     color: #826112;
 }
 
-.era-strip {
-    display: flex;
-    background-color: #FAF8F3;
-}
 
-.era-card {
-    flex: 1;
-    display: flex;
-    padding: 0 10px 10px 10px;
-    flex-direction: column;
-    border-right: 1px solid #DDD8CA;
-    font-family: var(--serif);
-    min-height: 120px;
-}
-
-.era-bar {
-    height: 3px;
-    width: 100%;
-}
-
-.era-name {
-    padding-left: 10px;
-    font-weight: bold;
-    font-size: 16px;
-    font-family: var(--serif);
-}
-
-.era-number {
-    padding-left: 10px;
-    color: #A8988E;
-    font-family: var(--mono);
-
-}
-
-.era-description {
-    padding-left: 10px;
-    color: #6B6756;
-    font-size: 13px;
-}
-
-.geographic-strip {
-    display: flex;
-    justify-content: space-between;
-    background: #F4F0E8;
-    padding: 8px 20px;
-    border: 1px solid #e0e0e0;
-    font: var(--mono);
-    color: #AA9C87;
-    font-size: 13px;
-}
-
-.content-area {
-    display: flex;
-    justify-content: space-between;
-    background: #F4F0E8;
-    padding: 8px 20px;
-    font: var(--mono);
-    color: #AA9C87;
-    font-size: 11px;
-}
-
-.feature-title {
-    display: flex;
-    justify-content: space-between;
-    background: #F4F0E8;
-    padding: 8px 20px;
-    font: var(--mono);
-    color: #AA9C87;
-    font-size: 11px;
-    border-bottom: 1px solid #DDD8CA;
-}
-
-.feature-container {
-    display: flex;
-    padding: 15px;
-}
-
-.feature-img img {
-    width: 220px;
-    object-fit: contain;
-    border: 1px solid #DDD8CA;
-    border-radius: 4px;
-}
-
-.feature-text {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-}
-
-.category-text {
-    letter-spacing: 2px;
-    font-family: var(--mono);
-}
-
-.common-name {
-    font-family: var(--serif);
-    color: black;
-    font-size: 15px;
-    font-weight: 500px;
-}
-
-.sci-name {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 12px;
-    color: #5c5546;
-}
-
-.featured-desc {
-    font-size: 12px;
-    color: #5c5546;
-    line-height: 1.65;
-}
-
-.entry-details {
-    color: #9F9887;
-    letter-spacing: 2px;
-}
-
-.main {
-    border-right: 1px solid #DDD8CA;
-    border-bottom: 1px solid #DDD8CA;
-    border-top: 1px solid #DDD8CA;
-}
-
-.sidebar {
-    background: #FAF8F3;
-    height: 100%;
-    border-top: 1px solid #DDD8CA;
-}
-
-.body {
-    display: grid;
-    grid-template-columns: 1fr 220px;
-}
-
-.sidebar-block {
-    padding: 12px 14px;
-    border-bottom: 1px solid #DDD8CA;
-    background: #FAF8F3;
-}
-
-.sidebar-cat {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px 0;
-    border-bottom: 1px solid #F4F0E8;
-}
-
-.sidebar-label {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    color: #9c9080;
-}
-
-.sidebar-cat-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-
-}
-
-.sidebar-cat-name {
-    font-family: var(--mono);
-    font-size: 10px;
-    flex: 1;
-}
-
-.sidebar-cat-count {
-    font-family: var(--mono);
-    font-size: 10px;
-}
-
-.sidebar-block:last-child {
-    border-bottom: none;
-}
-
-.footer {
-    background: #1C1A14;
-    border-top: 1px solid #332e22;
-    padding: 8px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.footer-id {
-    font-size: 10px;
-    color: #4a4232;
-    font-family: var(--mono);
-    letter-spacing: 0.06em;
-}
-
-.shell {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-    margin: 0 auto;
-    max-width: 1100px;
-}
+/* ============================================================
+   LANDING PAGE — ADVISORY STRIP
+   ============================================================ */
 
 .advisory-strip {
     background: var(--surface);
@@ -488,12 +329,157 @@ body {
 }
 
 
-.log-row {
+/* ============================================================
+   LANDING PAGE — GEOLOGICAL ERA STRIP
+   ============================================================ */
+
+.geographic-strip {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px 0;
-    border-bottom: 1px solid #F4F0E8;
+    justify-content: space-between;
+    background: #F4F0E8;
+    padding: 8px 20px;
+    border: 1px solid #e0e0e0;
+    font: var(--mono);
+    color: #AA9C87;
+    font-size: 13px;
+}
+
+.era-strip {
+    display: flex;
+    background-color: #FAF8F3;
+}
+
+.era-card {
+    flex: 1;
+    display: flex;
+    padding: 0 10px 10px 10px;
+    flex-direction: column;
+    border-right: 1px solid #DDD8CA;
+    font-family: var(--serif);
+    min-height: 120px;
+}
+
+.era-bar {
+    height: 3px;
+    width: 100%;
+}
+
+.era-name {
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: var(--serif);
+}
+
+.era-number {
+    padding-left: 10px;
+    color: #A8988E;
+    font-family: var(--mono);
+}
+
+.era-description {
+    padding-left: 10px;
+    color: #6B6756;
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   LANDING PAGE — FEATURED ARTICLE, CHANGELOG & SIDEBAR
+   (the .body grid: main column + right sidebar)
+   ============================================================ */
+
+.body {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+}
+
+.main {
+    border-right: 1px solid #DDD8CA;
+    border-bottom: 1px solid #DDD8CA;
+    border-top: 1px solid #DDD8CA;
+}
+
+.feature-title {
+    display: flex;
+    justify-content: space-between;
+    background: #F4F0E8;
+    padding: 8px 20px;
+    font: var(--mono);
+    color: #AA9C87;
+    font-size: 11px;
+    border-bottom: 1px solid #DDD8CA;
+}
+
+.feature-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+}
+
+.feature-container:has(.feature-link:hover) {
+    background: #fbf2e0;
+}
+
+.feature-container {
+    display: flex;
+    padding: 15px;
+}
+
+.feature-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+}
+
+
+
+.feature-img img {
+    width: 160px;
+    object-fit: contain;
+    border: 1px solid #DDD8CA;
+    border-radius: 4px;
+}
+
+.feature-text {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.category-text {
+    letter-spacing: 2px;
+    font-family: var(--mono);
+}
+
+.common-name {
+    font-family: var(--serif);
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.sci-name {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12px;
+    color: #5c5546;
+}
+
+.featured-desc {
+    font-size: 12px;
+    color: #5c5546;
+    line-height: 1.65;
+}
+
+.entry-details {
+    color: #9F9887;
+    letter-spacing: 2px;
+}
+
+.log {
+    padding: 12px 14px;
+    border-top: 1px solid #DDD8CA;
 }
 
 .log-label {
@@ -504,7 +490,13 @@ body {
     text-transform: uppercase;
 }
 
-
+.log-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid #F4F0E8;
+}
 
 .log-badge {
     font-size: 9px;
@@ -522,21 +514,90 @@ body {
 }
 
 .log-revised {
-    background: 2px 6px #FEF3E2;
+    background: #FEF3E2;
+    padding: 2px 6px;
     color: #c27b12;
     border: 1px solid #FAC775;
 }
 
 .log-updated {
-    background: 2px 6px #EEEDF9;
+    background: #EEEDF9;
+    padding: 2px 6px;
     color: #534AB7;
     border: 1px solid #C4C1EC;
 }
 
-.log {
-    padding: 12px 14px;
+.sidebar {
+    background: #FAF8F3;
+    height: 100%;
     border-top: 1px solid #DDD8CA;
 }
+
+.sidebar-block {
+    padding: 12px 14px;
+    border-bottom: 1px solid #DDD8CA;
+    background: #FAF8F3;
+}
+
+.sidebar-block:last-child {
+    border-bottom: none;
+}
+
+.sidebar-cat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid #F4F0E8;
+}
+
+.sidebar-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    color: #9c9080;
+}
+
+.sidebar-subhead {
+    font-family: var(--serif);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 12px 0 4px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-cat-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.sidebar-cat-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    flex: 1;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.sidebar-cat-name:hover {
+    color: var(--accent-amber);
+}
+
+.sidebar-cat-count {
+    font-family: var(--mono);
+    font-size: 10px;
+}
+
+
+/* ============================================================
+   ENTRY PAGE  (entry.php — detail template)
+   header, faceplate, body sections, info boxes
+   ============================================================ */
 
 .entry-header {
     background: var(--bg);
@@ -600,13 +661,11 @@ body {
     border-color: #b0dcc8;
 }
 
-
 .extinct-tag.extant {
     background: #ece9e4;
     color: #6b6258;
     border-color: #cfc8bd;
 }
-
 
 .faceplate {
     display: block;
@@ -628,11 +687,10 @@ body {
 }
 
 .faceplate-img {
-    max-width: 80%;
-    max-height: 500px;
+    max-width: 100%;
+    max-height: 620px;
     object-fit: contain;
     display: block;
-    border: 1px solid var(--border);
     border: 1px solid var(--border);
 }
 
@@ -643,7 +701,6 @@ body {
     padding: 8px 20px;
     border-bottom: 1px solid var(--border);
     border-top: 1px solid var(--border);
-
 }
 
 .faceplate-caption-sci {
@@ -651,9 +708,8 @@ body {
     letter-spacing: 0.12em;
     font-size: 10px;
     margin-bottom: 8px;
-    text-transform: italic;
+    font-style: italic;
     color: #9F9887;
-
 }
 
 .faceplate-caption-meta {
@@ -664,12 +720,10 @@ body {
     text-align: right;
     text-transform: uppercase;
     color: #9F9887;
-
 }
 
 .faceplate-caption-name {
     font-family: var(--serif);
-    text-transform: bold;
     font-size: 14px;
     font-weight: 700;
 }
@@ -687,7 +741,6 @@ body {
     line-height: 1.7;
     margin-bottom: 28px;
     padding-bottom: 18px;
-    de
 }
 
 .entry-main-text {
@@ -712,6 +765,30 @@ body {
     line-height: 1.75;
     color: var(--text-primary);
     margin-bottom: 14px;
+}
+
+/* child-navigation lists under "Contains" / "Species" on a taxon entry */
+.entry-child-link {
+    display: inline-block;
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 4px 0;
+    transition: color 0.15s ease;
+}
+
+.entry-child-link::before {
+    content: "\203A";
+    color: var(--text-muted);
+    margin-right: 9px;
+    font-family: var(--mono);
+    transition: color 0.15s ease;
+}
+
+.entry-child-link:hover,
+.entry-child-link:hover::before {
+    color: var(--accent-amber);
 }
 
 .info-box {
@@ -754,10 +831,497 @@ body {
     text-align: right;
 }
 
-.phylum-dot {
+
+/* ============================================================
+   FAUNA — PHYLUM LEDGER  (fauna.php)
+   ============================================================ */
+
+/* --- page header --- */
+
+.fauna-head {
+    padding: 18px 0 14px;
+}
+
+.fauna-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--text-primary);
+    margin: 5px;
+}
+
+.fauna-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--text-secondary);
+    margin: 5px;
+}
+
+.fauna-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-muted);
+    margin: 5px;
+}
+
+/* --- ledger frame --- */
+
+.phylum-index {
+    border: 1px solid var(--border-faint);
+}
+
+/* --- row (whole-row link) + colour spine --- */
+
+.phylum-row {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+    background: #fefdfb;
+    border-bottom: 1px solid var(--border-faint);
+    cursor: pointer;
+    align-items: center;
+}
+
+.phylum-row:hover {
+    background: #faf2e4;
+}
+
+.phylum-spine {
     width: 6px;
-    height: 6px;
-    border-radius: 50%;
+    align-self: stretch;
     flex-shrink: 0;
-    display: inline-block;
+}
+
+/* --- row text block --- */
+
+.phylum-body {
+    flex: 1;
+    padding: 14px 20px;
+}
+
+.phylum-name {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.phylum-code {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    margin: 3px 0 8px;
+}
+
+.phylum-desc {
+    font-family: var(--serif);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+
+/* --- "access record" cue (dim, ignites amber on row hover) --- */
+
+.phylum-cue {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #c9bfa8;
+    flex-shrink: 0;
+    padding: 0 22px;
+}
+
+.phylum-row:hover .phylum-cue {
+    color: var(--accent-amber);
+}
+
+
+/* ============================================================
+   MISC / UNCATEGORIZED
+   ============================================================ */
+
+
+/* ============================================================
+   SEARCH RESULTS  (search.php)
+   ============================================================ */
+
+.search-page h2 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 14px;
+}
+
+.search-result {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 2px;
+    border-bottom: 1px solid var(--border-faint);
+    text-decoration: none;
+}
+
+.search-result-img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.search-result-text {
+    min-width: 0;
+}
+
+.search-result-name {
+    display: block;
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.search-result-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-top: 5px;
+}
+
+.search-result:hover .search-result-name {
+    color: var(--accent-amber);
+}
+
+
+/*===========================ADMIN FORM STUFF
+ =======================================*/
+
+.admin-form {
+    max-width: 530px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.admin-form label {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+}
+
+/* drag-and-drop image upload zone */
+.drop-zone {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    border: 1px dashed var(--border);
+    background: var(--surface);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.drop-zone.dragover {
+    border-color: var(--accent-amber);
+    background: #fbf2e0;
+}
+
+.drop-zone-text {
+    display: block;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+}
+
+/* the file input inside the zone: drop the full-width form-input styling */
+.drop-zone input {
+    width: auto;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font-size: 11px;
+}
+
+.admin-form textarea {
+    min-height: 110px;
+}
+
+.admin-form button {
+    margin-top: 8px;
+    padding: 10px 22px;
+    background: var(--accent-amber);
+    color: var(--surface);
+    border: none;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.admin-form button:hover {
+    background: var(--text-primary);
+}
+
+.admin-title {
+    text-align: center;
+}
+
+.admin-msg {
+    max-width: 530px;
+    margin: 0 auto 16px;
+    padding: 10px 14px;
+    background: var(--surface);
+    border-left: 3px solid var(--accent-amber);
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+.admin-switch {
+    max-width: 530px;
+    margin: 0 auto 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 13px;
+}
+
+.admin-switch a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+}
+
+.admin-switch a:hover {
+    color: var(--accent-amber);
+}
+
+.admin-switch a.active {
+    color: var(--accent-amber);
+    border-bottom-color: var(--accent-amber);
+}
+
+.admin-switch-soon {
+    margin-left: auto;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.admin-switch select {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.admin-switch select:hover,
+.admin-switch select:focus {
+    border-color: var(--accent-amber);
+    outline: none;
+}
+
+.admin-switch .admin-logout {
+    margin-left: auto;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Quill editor reskinned to match the site. Scoped under .admin-form so these
+   beat quill.snow.css, which loads AFTER style.css (higher specificity wins). */
+.admin-form .ql-toolbar.ql-snow {
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 0;
+    background: var(--surface);
+}
+
+.admin-form .ql-container.ql-snow {
+    border: 1px solid var(--border);
+    border-radius: 0;
+    background: #f8f5ee;              /* same paper as the entry page (.entry-body) */
+    margin-bottom: 14px;
+}
+
+.admin-form .ql-editor {
+    font-family: var(--serif);
+    font-size: 13px;                 /* matches .body-text on the entry page */
+    line-height: 1.75;
+    color: var(--text-primary);
+    padding: 22px 26px;              /* document-style margins, like .entry-main-text */
+    min-height: 240px;
+}
+
+/* headings typed in the editor echo the entry's .section-heading look */
+.admin-form .ql-editor h1,
+.admin-form .ql-editor h2 {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 5px;
+    margin: 18px 0 10px;
+}
+
+.admin-form .ql-editor.ql-blank::before {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--text-muted);
+    left: 26px;                      /* align placeholder with the new padding */
+}
+
+/* Compose block: the admin form styled as the full entry page, edited in place.
+   Breaks out wider than the 530px form so the main+sidebar grid has room. */
+.entry-compose {
+    border: 1px solid var(--border);
+    background: #f8f5ee;             /* entry paper */
+    margin-bottom: 14px;
+    /* match the standard entry width (the ~1100px .shell), centered in the page */
+    width: 1040px;
+    max-width: 94vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* in-place sidebar values (Field Data / Article Info / Classification) */
+.admin-form .compose-side {
+    border: none;
+    background: transparent;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-primary);
+    text-align: right;
+    padding: 0;
+    margin: 0;
+    max-width: 62%;
+}
+
+.admin-form .compose-side:focus {
+    outline: none;
+    background: #fffdf8;
+}
+
+/* editable title + scientific name sitting inside the faceplate caption */
+.admin-form .compose-name,
+.admin-form .compose-sci {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    background: transparent;
+    padding: 2px 0;
+    margin: 0;
+}
+
+.admin-form .compose-name {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.admin-form .compose-sci {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #9F9887;
+}
+
+.admin-form .compose-name:focus,
+.admin-form .compose-sci:focus {
+    outline: none;
+    border-bottom: 1px solid var(--accent-amber);
+}
+
+/* each body section: typed in place under its heading, styled like .body-text */
+.admin-form .compose-section {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    background: transparent;
+    resize: vertical;
+    font-family: var(--serif);
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--text-primary);
+    padding: 2px 0;
+    margin: 0 0 6px;
+    min-height: 60px;
+}
+
+.admin-form .compose-section:focus {
+    outline: none;
+    background: #fffdf8;            /* faint highlight while editing a section */
+}
+
+/* headings typed into the lede echo the entry's section headings */
+.entry-compose h1,
+.entry-compose h2 {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 5px;
+    margin: 18px 0 10px;
+}
+
+.footer-admin {
+    font-family: var(--mono);
+    font-size: small;
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.footer-admin:hover {
+    color: var(--accent-amber);
+}
+
+.edit-link {
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-decoration-line: none;
+}
+
+.edit-link:hover {
+    color: var(--accent-amber);
 }

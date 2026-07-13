@@ -1,4 +1,4 @@
-CREATE DATABASE thrysus_project_db;
+CREATE DATABASE IF NOT EXISTS thrysus_project_db;
 USE thrysus_project_db;
 
 -- taxa table (classification tree: kingdom → phylum → … → clade)
@@ -18,7 +18,9 @@ CREATE TABLE taxa (
     first_described DATE,
     lead VARCHAR(100),
     last_edited DATE,
-    FOREIGN KEY (parent_taxon_id) REFERENCES taxa(id)
+    FOREIGN KEY (parent_taxon_id) REFERENCES taxa(id),
+    category ENUM('fauna','flora','tapetae') DEFAULT 'fauna',
+    image VARCHAR(255)
 );
 
 
@@ -30,7 +32,7 @@ CREATE TABLE species (
     species_description TEXT,
     species_image VARCHAR(255),
     ancestor_id INT,
-    taxon_id INT, 
+    taxon_id INT,
     status ENUM('extant', 'extinct') DEFAULT 'extant',
     body_length VARCHAR(50),
     mass VARCHAR(50),
@@ -63,6 +65,3 @@ CREATE TABLE geological_eras (
 -- Both appear together on the landing page (era timeline + phylum sidebar),
 -- so a shared colour would make one hue mean two different things.
 -- Reserve one palette for era colour_hex values, a distinct palette for phyla.
-
-
-

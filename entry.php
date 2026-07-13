@@ -1,8 +1,6 @@
 <?php
 
-$active = 'fauna';
-include 'header.php';
-include 'db_config.php'; 
+include 'db_config.php';
 $type = $_GET['type'] ?? 'taxon';
 $id = (int)($_GET ['id'] ?? 0);
 
@@ -14,6 +12,17 @@ if ($type == 'species') {
 
 $result = mysqli_query($db_connect, $query);
 $taxon = $result->fetch_assoc();
+
+// Highlight the nav section from the record's category so flora entries stop lighting up the Fauna tab.
+if ($type == 'species') {
+    $parent_tid = (int)($taxon['taxon_id'] ?? 0);
+    $cat_row = mysqli_query($db_connect, "SELECT category FROM taxa WHERE id = $parent_tid")->fetch_assoc();
+    $active = $cat_row['category'] ?? 'fauna';
+} else {
+    $active = $taxon['category'] ?? 'fauna';
+}
+
+include 'header.php';
 $title = ($type == 'species') ? $taxon['common_name'] : $taxon['name'];
 $lede = ( $type == 'species') ? $taxon['species_description'] : $taxon['description'];
 
@@ -83,6 +92,23 @@ $crumbs = array_reverse($crumbs);
 </div>
 </div>
 <?php  } ?>
+<?php if ($type != 'species' && !empty($taxon['image'])) { ?>
+<div class="faceplate">
+    <div class="faceplate-inner">
+        <img class="faceplate-img" src="images/<?php echo $taxon['image']; ?>" alt="<?php echo $title; ?>">
+    </div>
+    <div class="faceplate-caption">
+<div>
+    <div class="faceplate-caption-name"><?php echo $title ?></div>
+    <div class="faceplate-caption-sci"><?php echo $ranklabel; ?></div>
+</div>
+<div class ="faceplate-caption-meta">
+    Illus. SOHS Field Survey<br>
+    Fig. <?php echo "DNY-" . str_pad($id, 4, "0", STR_PAD_LEFT); ?>
+</div>
+</div>
+</div>
+<?php } ?>
 
     <div class="entry-body">
 
@@ -96,7 +122,7 @@ $kids_result = mysqli_query($db_connect, $kids);
 if (mysqli_num_rows($kids_result) > 0) {
     echo "<div class='section-heading'>Contains</div>";
 while ($row = $kids_result->fetch_assoc()) {
-echo "<a href='entry.php?id=" . $row['id'] . "'>" . $row['name'] . "</a><br>";
+echo "<a class='entry-child-link' href='entry.php?id=" . $row['id'] . "'>" . $row['name'] . "</a><br>";
     }
 }
 
@@ -106,7 +132,7 @@ $species_result = mysqli_query($db_connect, $species);
 if (mysqli_num_rows($species_result) > 0) {
     echo "<div class='section-heading'>Species</div>";
 while ($row = $species_result->fetch_assoc()) {
-echo "<a href='entry.php?type=species&id=" . $row['id'] . "'>" . $row['common_name'] . "</a><br>";
+echo "<a class='entry-child-link' href='entry.php?type=species&id=" . $row['id'] . "'>" . $row['common_name'] . "</a><br>";
 }
 }
 ?>
@@ -126,8 +152,10 @@ echo "<a href='entry.php?type=species&id=" . $row['id'] . "'>" . $row['common_na
             ];
 
             foreach ($sections as $column => $label) {
-                echo "<div class='section-heading'>$label</div>";
-                echo "<p class='body-text'>" . $taxon[$column] . "</p>";
+                if (!empty($taxon[$column])) {
+                    echo "<div class='section-heading'>$label</div>";
+                    echo "<p class='body-text'>" . $taxon[$column] . "</p>";
+                }
             }
             ?>
 
@@ -151,11 +179,13 @@ echo "<a href='entry.php?type=species&id=" . $row['id'] . "'>" . $row['common_na
                 $field = [
                     "Body length"    => $taxon['body_length'],
                     "Mass"           => $taxon['mass'],
-                    "Thermy"         => ucfirst($taxon['thermy']),
-                    "Encounter risk" => ucfirst($taxon['encounter_risk']),
+                     "Thermy" => ucfirst($taxon['thermy'] ?? ''),
+                    "Encounter risk" => ucfirst($taxon['encounter_risk'] ?? ''),
                 ];
                 foreach ($field as $key => $value) {
-                    echo "<div class='info-row'><span class='info-key'>$key</span><span class='info-value'>$value</span></div>";
+                    if (!empty($value)) {
+                        echo "<div class='info-row'><span class='info-key'>$key</span><span class='info-value'>$value</span></div>";
+                    }
                 }
                 ?>
             </div>
@@ -174,8 +204,12 @@ echo "<a href='entry.php?type=species&id=" . $row['id'] . "'>" . $row['common_na
                     echo "<div class='info-row'><span class='info-key'>$key</span><span class='info-value'>$value</span></div>";
                 }
                 ?>
+
             </div>
 
+                <a class="edit-link" href="admin.php?type=<?php echo $type; ?>&id=<?php echo $id; ?>">
+                    Edit this entry &rarr;
+                </a>
 
         </div>
     </div>
