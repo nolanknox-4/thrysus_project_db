@@ -1,0 +1,36 @@
+{
+    // --- IntelliSense: the "good ghost" — shows you what methods/args exist, you still write the code ---
+    "editor.quickSuggestions": {
+        "other": "on",
+        "comments": "off",
+        "strings": "off"
+    },
+    "editor.parameterHints.enabled": true,
+    "editor.parameterHints.cycle": false,
+    "editor.suggestOnTriggerCharacters": true,
+
+    // --- Catches YOUR recurring bugs: misplaced braces / unmatched parens, and indent drift ---
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active",
+    "editor.guides.indentation": true,
+
+    // --- Copilot's line-writing AI stays OFF on purpose: it writes the code for you (defeats learning) ---
+    "editor.inlineSuggest.enabled": false,
+    "github.copilot.nextEditSuggestions.enabled": false,
+    "github.copilot.chat.copilotMemory.enabled": false,
+
+    // --- PHP language server (left as you had it; Intelephense handles completion) ---
+    "php.suggest.basic": false,
+    "php.inlayHints.parameters.byReference": false,
+    "php.inlayHints.parameters.enabled": false,
+    "php.inlayHints.types.lambdaParameter": false,
+    "php.inlayHints.types.suppressVariableFromLiteral": false,
+    "intelephense.completion.suggestObjectOperatorStaticMethods": false,
+
+    // --- Formatting: Prettier for CSS/JSON/MD, Intelephense keeps PHP (needs no npm) ---
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "[php]": {
+        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+    }
+}
