@@ -53,6 +53,41 @@ while ($walker) {
 
 $crumbs = array_reverse($crumbs);
 
+// Plate fallback: if this subject has no image of its own, borrow one from a plate it appears in.
+// Even when it has its own image, surface the plate as a cross-link ("also pictured in").
+$plate_subject_type = ($type == 'species') ? 'species' : 'taxon';
+$plate_match = $db_connect->execute_query(
+    "SELECT p.* FROM plates p JOIN plate_subjects ps ON ps.plate_id = p.id WHERE ps.subject_type = ? AND ps.subject_id = ? ORDER BY p.id LIMIT 1",
+    [$plate_subject_type, $id]
+)->fetch_assoc();
+
+$own_image = ($type == 'species') ? ($taxon['species_image'] ?? '') : ($taxon['image'] ?? '');
+$faceplate_image = $own_image !== '' ? $own_image : ($plate_match['image'] ?? '');
+
+// other subjects sharing that same plate, for the "pictured together" sidebar box
+$castmates = [];
+if ($plate_match) {
+    $cm_result = $db_connect->execute_query(
+        "SELECT subject_type, subject_id, label FROM plate_subjects WHERE plate_id = ? AND NOT (subject_type = ? AND subject_id = ?)",
+        [$plate_match['id'], $plate_subject_type, $id]
+    );
+    while ($cm = $cm_result->fetch_assoc()) {
+        if ($cm['subject_type'] === 'species') {
+            $cs = $db_connect->execute_query("SELECT id, common_name FROM species WHERE id = ?", [$cm['subject_id']])->fetch_assoc();
+            if ($cs) {
+                $castmates[] = ['link' => 'entry.php?type=species&id=' . $cs['id'], 'name' => $cs['common_name']];
+            }
+        } elseif ($cm['subject_type'] === 'taxon') {
+            $ct = $db_connect->execute_query("SELECT id, name FROM taxa WHERE id = ?", [$cm['subject_id']])->fetch_assoc();
+            if ($ct) {
+                $castmates[] = ['link' => 'entry.php?id=' . $ct['id'], 'name' => $ct['name']];
+            }
+        } else {
+            $castmates[] = ['link' => null, 'name' => $cm['label']];
+        }
+    }
+}
+
 ?>
 
 
@@ -75,15 +110,15 @@ $crumbs = array_reverse($crumbs);
 
 
 </div>
-<?php if ($type == 'species') { ?>
+<?php if (!empty($faceplate_image)) { ?>
 <div class="faceplate">
     <div class="faceplate-inner">
-        <img class="faceplate-img" src="images/<?php echo $taxon['species_image']; ?>" alt="<?php echo $title; ?>">
+        <img class="faceplate-img" src="images/<?php echo htmlspecialchars($faceplate_image); ?>" alt="<?php echo htmlspecialchars($title); ?>">
     </div>
     <div class="faceplate-caption">
 <div>
     <div class="faceplate-caption-name"><?php echo $title ?></div>
-    <div class="faceplate-caption-sci"><?php echo $taxon['scientific_name'];?></div>
+    <div class="faceplate-caption-sci"><?php echo ($type == 'species') ? $taxon['scientific_name'] : $ranklabel; ?></div>
 </div>
 <div class ="faceplate-caption-meta">
     Illus. SOHS Field Survey<br>
@@ -91,23 +126,12 @@ $crumbs = array_reverse($crumbs);
 </div>
 </div>
 </div>
-<?php  } ?>
-<?php if ($type != 'species' && !empty($taxon['image'])) { ?>
-<div class="faceplate">
-    <div class="faceplate-inner">
-        <img class="faceplate-img" src="images/<?php echo $taxon['image']; ?>" alt="<?php echo $title; ?>">
-    </div>
-    <div class="faceplate-caption">
-<div>
-    <div class="faceplate-caption-name"><?php echo $title ?></div>
-    <div class="faceplate-caption-sci"><?php echo $ranklabel; ?></div>
+<?php if ($plate_match) { ?>
+<div class="plate-credit">
+    <?php echo ($own_image === '') ? 'Pictured in' : 'Also pictured in'; ?>
+    <a href="plates.php?id=<?php echo $plate_match['id']; ?>"><?php echo htmlspecialchars($plate_match['title']); ?></a>
 </div>
-<div class ="faceplate-caption-meta">
-    Illus. SOHS Field Survey<br>
-    Fig. <?php echo "DNY-" . str_pad($id, 4, "0", STR_PAD_LEFT); ?>
-</div>
-</div>
-</div>
+<?php } ?>
 <?php } ?>
 
     <div class="entry-body">
@@ -206,6 +230,19 @@ echo "<a class='entry-child-link' href='entry.php?type=species&id=" . $row['id']
                 ?>
 
             </div>
+
+            <?php if (!empty($castmates)) { ?>
+            <div class="info-box">
+                <div class="info-box-header">Pictured Together</div>
+                <?php foreach ($castmates as $cm) { ?>
+                    <?php if ($cm['link']) { ?>
+                        <a class="entry-child-link" href="<?php echo $cm['link']; ?>"><?php echo htmlspecialchars($cm['name']); ?></a><br>
+                    <?php } else { ?>
+                        <span class="entry-child-link entry-child-unlinked"><?php echo htmlspecialchars($cm['name']); ?></span><br>
+                    <?php } ?>
+                <?php } ?>
+            </div>
+            <?php } ?>
 
                 <a class="edit-link" href="admin.php?type=<?php echo $type; ?>&id=<?php echo $id; ?>">
                     Edit this entry &rarr;
