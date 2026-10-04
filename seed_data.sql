@@ -56,3 +56,11 @@ INSERT INTO taxa (name, rank, parent_taxon_id, category, colour_hex, description
 ('Necrotapeta', 'phylum', 13, 'tapetae', '#8A7A82', '<p>Generalist free-living decomposers, litter/detritus breakdown, terrestrial and shallow aquatic.</p>'),
 ('Methanotapeta', 'phylum', 13, 'tapetae', '#A98C6B', '<p>Methanotrophs spanning free-living mobile/dispersed forms <em>and</em> mat/biofilm-forming colonial forms as a within-phylum growth-form split. </p>'),
 ('Endotapeta', 'phylum', 13, 'tapetae', '#7C4A5D', '<p>Parasitic and mutualistic lineages living in/on other organisms, spanning harmful-to-beneficial, the only Tapetae phylum capable of limited locomotion.</p>');
+
+-- Biomes: habitat-type chapters (Dixon-style "The Plains"/"The Forests"), independent of
+-- taxonomy/era. Plates are tagged with the biome they're set in.
+INSERT INTO biomes (name, description, colour_hex) VALUES
+('Pioneer Forest', 'The Hygrophyte global forest margins — dense interlocked columns over raw mineral substrate.', '#7A8B5A'),
+('Arid Crust', 'Bare rockpan and mineral flats where only the hardiest succulent flora anchor.', '#C2A878'),
+('Tidal Shelf', 'Shallow seas and tidal margins where aquatic thallophytes and benthic fauna meet the shore.', '#5B8A9A'),
+('High Thermals', 'The open air above the canopy, ridden by buoyant airborne flora and whatever preys on them.', '#A9B8C4');
