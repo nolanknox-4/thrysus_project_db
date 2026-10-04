@@ -13,8 +13,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: thrysus_project_db
-    ports:
-      - "3306:3306"
+    # no host port mapping — `web` reaches this over the internal Docker network via
+    # the "db" hostname, and the DB has no reason to be reachable from outside Docker.
     volumes:
       - db_data:/var/lib/mysql
       - ./SCHEMA.SQL:/docker-entrypoint-initdb.d/01-schema.sql

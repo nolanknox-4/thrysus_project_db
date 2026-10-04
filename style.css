@@ -74,6 +74,65 @@ body {
 .search-wrap {
     flex: 1;
     max-width: 340px;
+    position: relative;
+}
+
+.search-suggestions {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    z-index: 100;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.search-suggestions.is-open {
+    display: block;
+}
+
+.search-suggestion {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 10px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-faint);
+}
+
+.search-suggestion:last-child {
+    border-bottom: none;
+}
+
+.search-suggestion:hover,
+.search-suggestion.is-active {
+    background: #faf2e4;
+}
+
+.search-suggestion-label {
+    font-family: var(--serif);
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+.search-suggestion-sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.search-suggestion-empty {
+    padding: 10px;
+    font-family: var(--serif);
+    font-size: 12px;
+    color: var(--text-muted);
 }
 
 .search-input {
@@ -357,6 +416,13 @@ body {
     border-right: 1px solid #DDD8CA;
     font-family: var(--serif);
     min-height: 120px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.era-card:hover .era-name {
+    color: var(--accent-amber);
 }
 
 .era-bar {
@@ -661,6 +727,15 @@ body {
     border-color: #b0dcc8;
 }
 
+a.entry-tag {
+    text-decoration: none;
+}
+
+a.entry-tag:hover {
+    border-color: var(--accent-amber);
+    color: var(--accent-amber);
+}
+
 .extinct-tag.extant {
     background: #ece9e4;
     color: #6b6258;
@@ -728,6 +803,27 @@ body {
     font-weight: 700;
 }
 
+/* credit line under a faceplate borrowed from (or shared with) a plate */
+.plate-credit {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--bg);
+    padding: 6px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.plate-credit a {
+    color: var(--accent-amber);
+    text-decoration: none;
+}
+
+.plate-credit a:hover {
+    text-decoration: underline;
+}
+
 .entry-body {
     display: grid;
     grid-template-columns: 1fr 260px;
@@ -789,6 +885,18 @@ body {
 .entry-child-link:hover,
 .entry-child-link:hover::before {
     color: var(--accent-amber);
+}
+
+/* a plate's unlinked/background subjects — same row shape, no link, stays muted */
+.entry-child-unlinked {
+    color: var(--text-muted);
+    font-style: italic;
+    cursor: default;
+}
+
+.entry-child-unlinked:hover,
+.entry-child-unlinked:hover::before {
+    color: var(--text-muted);
 }
 
 .info-box {
@@ -867,6 +975,15 @@ body {
     margin: 5px;
 }
 
+/* a biome's section of plates on the merged Plates index (plates.php) */
+.plate-biome-group {
+    margin-top: 24px;
+}
+
+.plate-biome-group:first-of-type {
+    margin-top: 0;
+}
+
 /* --- ledger frame --- */
 
 .phylum-index {
@@ -934,6 +1051,138 @@ body {
 
 .phylum-row:hover .phylum-cue {
     color: var(--accent-amber);
+}
+
+/* ============================================================
+   CLADOGRAM  (cladogram.php — shared panel on fauna/flora/tapetae)
+   clade-centric tree: coloured dots + elbow connectors, collapsible
+   ============================================================ */
+
+.clado-panel {
+    border: 1px solid var(--border-faint);
+    background: #fefdfb;
+    margin-top: 20px;
+}
+
+.clado-panel-header {
+    background: var(--topbar-bg);
+    color: #c9c2ad;
+    font-size: 9px;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 8px 12px;
+}
+
+.clado-empty {
+    padding: 14px 20px;
+    font-family: var(--serif);
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.clado-tree, .clado-children {
+    list-style: none;
+    margin: 0;
+    padding: 10px 20px 10px 14px;
+}
+
+.clado-children {
+    padding: 2px 0 2px 18px;
+    margin-left: 7px;
+    border-left: 1px solid var(--border-faint);
+}
+
+.clado-node {
+    position: relative;
+    padding-left: 14px;
+}
+
+.clado-node::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 13px;
+    width: 12px;
+    border-top: 1px solid var(--border-faint);
+}
+
+.clado-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 4px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.clado-row:hover .clado-name {
+    color: var(--accent-amber);
+}
+
+.clado-caret {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    transform: rotate(90deg);
+    transition: transform 0.12s ease;
+    width: 10px;
+    text-align: center;
+}
+
+.clado-node.is-collapsed > .clado-row .clado-caret {
+    transform: rotate(0deg);
+}
+
+.clado-node.is-collapsed > .clado-children {
+    display: none;
+}
+
+.clado-tip > .clado-row {
+    padding-left: 16px; /* aligns with siblings that have a caret */
+}
+
+.clado-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.clado-name {
+    font-family: var(--serif);
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+.clado-sci {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.clado-dagger {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.clado-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+}
+
+.clado-key {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-top: 1px solid var(--border-faint);
+    padding: 7px 14px;
 }
 
 
@@ -1300,6 +1549,103 @@ body {
     border-bottom: 1px solid var(--border);
     padding-bottom: 5px;
     margin: 18px 0 10px;
+}
+
+/* live-filter box above a picker select or the plate subject checklist */
+.admin-filter {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 5px 8px;
+}
+
+.admin-filter:focus {
+    outline: none;
+    border-color: var(--accent-amber);
+}
+
+/* hotspot placement — admin Plate form only (plates.php reuses .hotspot-stage/.hotspot-marker for display) */
+.hotspot-stage {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+}
+
+.hotspot-stage.is-placing {
+    cursor: crosshair;
+}
+
+.hotspot-marker {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    border-radius: 50%;
+    background: var(--accent-amber);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px var(--accent-amber);
+    cursor: default;
+}
+
+/* public-facing numbered + clickable variant, on a plate's own page */
+.hotspot-marker-numbered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    transition: transform 0.12s ease;
+}
+
+a.hotspot-marker-numbered:hover {
+    transform: scale(1.25);
+    cursor: pointer;
+}
+
+.hotspot-place-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0 0 0 4px;
+    line-height: 1;
+}
+
+.hotspot-hint {
+    padding: 8px 12px;
+    font-family: var(--serif);
+    font-size: 11px;
+    font-style: italic;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-faint);
+}
+
+/* checklist of species/taxa attached to a plate, in the admin Plate form */
+.plate-subject-list {
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 4px 0;
+}
+
+.plate-subject-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 12px;
+    font-family: var(--serif);
+    font-size: 12px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.plate-subject-row:hover {
+    background: #fffdf8;
 }
 
 .footer-admin {

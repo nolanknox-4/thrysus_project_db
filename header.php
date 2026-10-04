@@ -1,4 +1,11 @@
-<?php if (!isset($active)) { $active = ''; } ?>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // needed here so footer.php can tell if the visitor is the logged-in admin
+}
+if (!isset($active)) {
+    $active = '';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -19,11 +26,12 @@
         </div>
 
         <div class="search-wrap">
-            <form method="GET" action="search.php">
-                <input class="search-input" type="text" name="q" placeholder="search species, phyla, biome">
+            <form method="GET" action="search.php" autocomplete="off">
+                <input class="search-input" type="text" name="q" id="search-input" placeholder="search species, phyla, biome">
             </form>
+            <div id="search-suggestions" class="search-suggestions"></div>
         </div>
-       
+
 
         <div class="nav-right">
             <span class="pill">SOHS-VDSRP</span>   <span class="pill">ACCESS: LVL: 2</span>
@@ -32,6 +40,6 @@
 
     <nav class="subnav">
         <a href="index.php" class="<?php if ($active == 'main') echo 'active'; ?>"> Main Page </a>
-        <a href="fauna.php" class="<?php if ($active == 'fauna') echo 'active'; ?>"> Fauna </a>
-        <a href="flora.php" class="<?php if ($active == 'flora') echo 'active'; ?>"> Flora </a> <a href="tapetae.php" class="<?php if ($active == 'tapetae') echo 'active'; ?>"> Tapetae </a> <span> Xenoanthropology </span> <span> Plates </span> <span style="margin-left: auto"> Geography </span> <span> Biomes </span> <span> Geology </span> <span> Timeline </span>
+        <a href="taxa.php" class="<?php if (in_array($active, ['taxa', 'fauna', 'flora', 'tapetae'], true)) echo 'active'; ?>"> Taxa </a>
+        <a href="cladogram.php" class="<?php if ($active == 'cladogram') echo 'active'; ?>"> Cladogram </a> <span> Xenoanthropology </span> <a href="plates.php" class="<?php if ($active == 'plates') echo 'active'; ?>" style="margin-left: auto;"> Plates </a> <a href="timeline.php" class="<?php if ($active == 'timeline') echo 'active'; ?>"> Timeline </a>
     </nav>
