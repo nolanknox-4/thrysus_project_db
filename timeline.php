@@ -3,7 +3,7 @@
 $active = 'timeline';
 include 'header.php';
 include 'db_config.php';
-include 'plate-row.php';
+include 'site-text.php';
 
 if ($db_connect->connect_error) {
     die("Connection Failed: " . $db_connect->connect_error);
@@ -24,26 +24,24 @@ $eras = $db_connect->execute_query("SELECT * FROM geological_eras ORDER BY era_n
         [$era['id']]
     )->fetch_all(MYSQLI_ASSOC);
 ?>
+    <!-- each era reads as a chapter: coloured heading, its description, then its plates as plain › links -->
     <div id="era-<?php echo $era['id']; ?>" class="plate-biome-group">
         <div class="section-heading">
+            <span class="era-dot" style="background: <?php echo htmlspecialchars($era['colour_hex'] ?? '#9c9080'); ?>;"></span>
             Era <?php echo (int) $era['era_number']; ?> &middot; <?php echo htmlspecialchars($era['era_name']); ?>
         </div>
-        <p class="body-text"><?php echo htmlspecialchars($era['era_description'] ?? ''); ?></p>
+        <?php // saves straight into geological_eras.era_description when edited in place
+        $era_text = $era['era_description'] ?? '';
+        echo "<div class='editable'" . edit_attrs('era:' . (int) $era['id'], $era_text, 'Blank line = new paragraph') . ">";
+        echo trim($era_text) !== '' ? text_to_html($era_text) : (is_editor() ? "<p class='body-text placeholder'>To be written</p>" : '');
+        echo "</div>"; ?>
 
         <?php if (!empty($era_plates)) { ?>
-            <div class="phylum-index">
-                <?php foreach ($era_plates as $row) {
-                    render_plate_ledger_row($db_connect, $row, $era['colour_hex'] ?? null);
-                } ?>
-            </div>
+            <?php foreach ($era_plates as $row) { ?>
+                <a class="entry-child-link" href="plates.php?id=<?php echo (int) $row['id']; ?>"><?php echo htmlspecialchars($row['title']); ?></a><br>
+            <?php } ?>
         <?php } else { ?>
-            <div class="phylum-index">
-                <div class="phylum-row" style="cursor:default;">
-                    <div class="phylum-body">
-                        <div class="phylum-desc">No plates set in this era yet.</div>
-                    </div>
-                </div>
-            </div>
+            <span class="entry-child-link entry-child-unlinked">No plates set in this era yet</span>
         <?php } ?>
     </div>
 <?php } ?>

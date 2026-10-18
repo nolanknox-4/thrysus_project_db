@@ -1,0 +1,64 @@
+# docker-compose.prod.yml — the LIVE server setup (docker-compose.yml stays the local dev one).
+# Run on the server with:
+#   docker compose -f docker-compose.prod.yml up -d --build
+# Needs a .env file next to it (copy .env.example). See DEPLOY.md for the full walkthrough.
+#
+# Differences from local dev:
+#   - the site runs from the built image, not a live view of this folder, so private files
+#     listed in .dockerignore never reach the server's web root
+#   - uploaded images live in a permanent volume, so rebuilding/updating the site keeps them
+#   - Caddy sits in front, gets a free HTTPS certificate for SITE_DOMAIN and renews it itself
+#   - nothing but Caddy is reachable from the internet
+
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    volumes:
+      # uploads land in images/. a named volume survives rebuilds; on first start Docker
+      # fills it with the images baked into the build, after that it's never overwritten
+      - site_images:/var/www/html/images
+    environment:
+      DB_HOST: db
+      DB_NAME: thrysus_project_db
+      DB_USER: ${DB_USER:?set DB_USER in .env}
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:?set ADMIN_PASSWORD_HASH in .env}
+    depends_on:
+      - db
+    # no ports: only Caddy talks to it, over Docker's internal network
+
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD in .env}
+      MYSQL_DATABASE: thrysus_project_db
+      # the site's own non-root user, created on the very first start
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/SCHEMA.SQL:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./db/seed_data.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?set SITE_DOMAIN in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data        # certificates: keep, or Caddy has to re-request them
+      - caddy_config:/config
+    depends_on:
+      - web
+
+volumes:
+  db_data:
+  site_images:
+  caddy_data:
+  caddy_config:

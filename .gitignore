@@ -1,3 +1,4 @@
-db_config.php
 .claude/
 images/desktop.ini
+.env
+backups/

@@ -4,21 +4,35 @@ services:
     ports:
       - "8080:80"
     volumes:
+      # live-edit the code locally. on the live server, remove this line so the site runs
+      # from the built image (which leaves out the private files listed in .dockerignore)
       - .:/var/www/html
+    environment:
+      # everything secret comes from a .env file next to this one (copy .env.example to start).
+      # with no .env, these fall back to the local development defaults.
+      DB_HOST: db
+      DB_NAME: thrysus_project_db
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-root}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
     depends_on:
       - db
 
   db:
     image: mariadb:11
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
       MYSQL_DATABASE: thrysus_project_db
+      # a dedicated, non-root user for the site. only created the first time the
+      # database volume is made, so set these in .env before the first launch on the server
+      MYSQL_USER: ${DB_USER:-}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-}
     # no host port mapping — `web` reaches this over the internal Docker network via
     # the "db" hostname, and the DB has no reason to be reachable from outside Docker.
     volumes:
       - db_data:/var/lib/mysql
-      - ./SCHEMA.SQL:/docker-entrypoint-initdb.d/01-schema.sql
-      - ./seed_data.sql:/docker-entrypoint-initdb.d/02-seed.sql
+      - ./db/SCHEMA.SQL:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./db/seed_data.sql:/docker-entrypoint-initdb.d/02-seed.sql
 
 volumes:
   db_data:

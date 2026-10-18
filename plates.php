@@ -1,14 +1,17 @@
 <?php
 
 $active = 'plates';
-include 'header.php';
 include 'db_config.php';
-
-if ($db_connect->connect_error) {
-    die("Connection Failed: " . $db_connect->connect_error);
-}
+include 'site-text.php';
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+// a link to a plate that doesn't exist answers 404 (has to be set before header.php prints anything)
+if ($id > 0 && $db_connect->execute_query("SELECT 1 FROM plates WHERE id = ?", [$id])->num_rows === 0) {
+    http_response_code(404);
+}
+
+include 'header.php';
 
 if ($id > 0) {
 
@@ -74,6 +77,7 @@ if ($id > 0) {
 
     <div class="entry-header">
         <div class="entry-breadcrumb"><a href="plates.php">Plates</a> &rsaquo; <?php echo htmlspecialchars($plate['title']); ?></div>
+        <h1 class="entry-title"><?php echo htmlspecialchars($plate['title']); ?></h1>
         <div class="entry-tags">
             <?php if (!empty($plate['biome_name'])) { ?>
                 <a class="entry-tag" href="plates.php#biome-<?php echo (int) $plate['biome_id']; ?>"><?php echo htmlspecialchars($plate['biome_name']); ?></a>
@@ -100,15 +104,11 @@ if ($id > 0) {
                 <?php } ?>
             </div>
         </div>
-        <div class="faceplate-caption">
-            <div>
-                <div class="faceplate-caption-name"><?php echo htmlspecialchars($plate['title']); ?></div>
-                <div class="faceplate-caption-sci"><?php echo count($roster); ?> subject<?php echo count($roster) === 1 ? '' : 's'; ?> pictured</div>
-            </div>
-            <div class="faceplate-caption-meta">
-                Illus. SOHS Field Survey<br>
-                Fig. <?php echo "DNY-P" . str_pad($id, 4, "0", STR_PAD_LEFT); ?>
-            </div>
+        <div class="faceplate-caption faceplate-caption-slim">
+            <div class="plate-credit-inline"><?php echo count($roster); ?> subject<?php echo count($roster) === 1 ? '' : 's'; ?> pictured</div>
+            <?php if (!empty($plate['location'])) { ?>
+                <div class="faceplate-caption-meta"><?php echo htmlspecialchars($plate['location']); ?></div>
+            <?php } ?>
         </div>
     </div>
 
@@ -116,6 +116,20 @@ if ($id > 0) {
         <div class="entry-main-text">
             <div class="entry-lede">
                 <p><?php echo $plate['tour_text']; ?></p>
+            </div>
+
+            <?php
+            // plate info as one quiet closing line, same as entry pages
+            $meta = ["DNY-P" . str_pad($id, 4, "0", STR_PAD_LEFT)];
+            if (!empty($plate['first_described'])) $meta[] = 'First described ' . htmlspecialchars($plate['first_described']);
+            if (!empty($plate['lead']))            $meta[] = 'Lead ' . htmlspecialchars($plate['lead']);
+            if (!empty($plate['last_edited']))     $meta[] = 'Edited ' . htmlspecialchars($plate['last_edited']);
+            ?>
+            <div class="entry-meta">
+                <?php echo implode(' · ', $meta); ?>
+                <?php if (!empty($_SESSION['authed'])) { ?>
+                    <a class="edit-link" href="admin.php?type=plate&id=<?php echo $id; ?>">Edit &rarr;</a>
+                <?php } ?>
             </div>
         </div>
 
@@ -135,18 +149,6 @@ if ($id > 0) {
                     <div class="info-row"><span class="info-key">—</span><span class="info-value">No subjects tagged yet</span></div>
                 <?php } ?>
             </div>
-
-            <div class="info-box">
-                <div class="info-box-header">Plate Info</div>
-                <div class="info-row"><span class="info-key">Entry</span><span class="info-value">DNY-P<?php echo str_pad($id, 4, "0", STR_PAD_LEFT); ?></span></div>
-                <div class="info-row"><span class="info-key">First Described</span><span class="info-value"><?php echo htmlspecialchars($plate['first_described'] ?? ''); ?></span></div>
-                <div class="info-row"><span class="info-key">Lead</span><span class="info-value"><?php echo htmlspecialchars($plate['lead'] ?? ''); ?></span></div>
-                <div class="info-row"><span class="info-key">Last Edited</span><span class="info-value"><?php echo htmlspecialchars($plate['last_edited'] ?? ''); ?></span></div>
-            </div>
-
-            <a class="edit-link" href="admin.php?type=plate&id=<?php echo $id; ?>">
-                Edit this plate &rarr;
-            </a>
         </div>
     </div>
 
@@ -180,12 +182,14 @@ if ($id > 0) {
         ?>
         <div id="biome-<?php echo $biome['id']; ?>" class="plate-biome-group">
             <div class="section-heading"><?php echo htmlspecialchars($biome['name']); ?></div>
-            <?php if (!empty($biome['description'])) { ?>
-                <p class="body-text"><?php echo htmlspecialchars($biome['description']); ?></p>
-            <?php } ?>
-            <div class="phylum-index">
+            <?php // saves straight into biomes.description when edited in place
+            $biome_text = $biome['description'] ?? '';
+            echo "<div class='editable'" . edit_attrs('biome:' . (int) $biome['id'], $biome_text, 'Blank line = new paragraph') . ">";
+            echo trim($biome_text) !== '' ? text_to_html($biome_text) : (is_editor() ? "<p class='body-text placeholder'>To be written</p>" : '');
+            echo "</div>"; ?>
+            <div class="plate-grid">
                 <?php foreach ($biome_plates as $row) {
-                    render_plate_ledger_row($db_connect, $row, $biome['colour_hex'] ?? null);
+                    render_plate_card($db_connect, $row, $biome['colour_hex'] ?? null);
                 } ?>
             </div>
         </div>
@@ -200,9 +204,9 @@ if ($id > 0) {
         ?>
         <div class="plate-biome-group">
             <div class="section-heading">Unsorted</div>
-            <div class="phylum-index">
+            <div class="plate-grid">
                 <?php foreach ($unsorted as $row) {
-                    render_plate_ledger_row($db_connect, $row);
+                    render_plate_card($db_connect, $row);
                 } ?>
             </div>
         </div>

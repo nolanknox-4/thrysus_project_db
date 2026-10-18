@@ -1,0 +1,21 @@
+# Caddyfile — the front door on the live server (used by docker-compose.prod.yml).
+# Caddy fetches and renews a free HTTPS certificate for SITE_DOMAIN by itself, redirects
+# plain http to https, and passes every request on to the PHP site.
+
+{$SITE_DOMAIN} {
+    encode gzip
+
+    # browsers: always use https for this site from now on; no framing by other sites;
+    # don't guess file types; don't leak full URLs to other sites
+    header {
+        Strict-Transport-Security "max-age=31536000"
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        -Server
+    }
+
+    # Caddy tells PHP the original request was https (X-Forwarded-Proto), which is what
+    # session.php checks before marking the login cookie secure
+    reverse_proxy web:80
+}

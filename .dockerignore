@@ -1,0 +1,33 @@
+# files that must never end up inside the live web server image.
+# (the Dockerfile copies this whole folder in, minus everything listed here)
+
+# secrets and local settings
+.env
+.env.*
+!.env.example
+
+# project history and editor/tool folders
+.git
+.gitignore
+.claude
+.vscode
+
+# database dumps, schema, seed data and setup scripts
+db/
+
+# docker and server setup files
+Dockerfile
+docker-compose*.yml
+.dockerignore
+Caddyfile
+
+# server scripts, backups and docs
+ops/
+backups/
+*.md
+
+# unrelated side projects living in this folder
+conlang-workbench*
+
+# windows clutter
+**/desktop.ini

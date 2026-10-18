@@ -103,6 +103,15 @@ CREATE TABLE plate_subjects (
     FOREIGN KEY (plate_id) REFERENCES plates(id)
 );
 
+-- site_text: page copy that isn't an entry (the Dionysus page sections, the homepage hero,
+-- the planetary data lists), edited in place on the page when logged in.
+-- A missing row just means the page shows its built-in default text.
+CREATE TABLE site_text (
+    slug VARCHAR(100) PRIMARY KEY,
+    body TEXT,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 
 
 -- COLOUR CONVENTION:

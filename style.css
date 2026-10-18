@@ -28,7 +28,6 @@ body {
     padding: 20px;
 }
 
-
 /* ============================================================
    SHARED CHROME  (header.php / footer.php)
    shell, topbar, search, nav, footer — on every page
@@ -40,20 +39,23 @@ body {
     border-radius: 6px;
     overflow: hidden;
     margin: 0 auto;
-    max-width: 1100px;
+    max-width: 1280px;
 }
 
+/* three columns: logo | search | empty. the two outer columns share the leftover space
+   equally, which keeps the search box dead centre now that nothing sits on the right */
 .topbar {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 340px) 1fr;
+    gap: 16px;
     align-items: center;
-    justify-content: space-between;
     background: #1C1A14;
     border-bottom: 1px solid #e0e0e0;
     padding: 10px 20px;
 }
 
 .logo {
+    text-decoration: none;
     display: flex;
     flex-direction: column;
     font-size: 11px;
@@ -72,8 +74,7 @@ body {
 }
 
 .search-wrap {
-    flex: 1;
-    max-width: 340px;
+    width: 100%;
     position: relative;
 }
 
@@ -86,7 +87,7 @@ body {
     background: var(--surface);
     border: 1px solid var(--border);
     z-index: 100;
-    max-height: 320px;
+    max-height: min(440px, 70vh);
     overflow-y: auto;
 }
 
@@ -128,6 +129,35 @@ body {
     flex-shrink: 0;
 }
 
+.search-suggestion {
+    align-items: center;
+}
+
+.search-suggestion-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.search-suggestion-detail {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+/* the closing "See all results" row */
+.search-suggestion-all {
+    background: #f4f0e8;
+}
+
+.search-suggestion-all .search-suggestion-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--accent-amber);
+}
+
 .search-suggestion-empty {
     padding: 10px;
     font-family: var(--serif);
@@ -143,20 +173,6 @@ body {
     border-radius: 6px;
     background: #2A261D;
     color: #F0EAD9;
-}
-
-.pill {
-    background-color: transparent;
-    border: 1px solid #e0e0e0;
-    padding: 3px 9px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border-radius: 2px;
-    font-size: 9px;
-    font-family: var(--mono);
-    color: #999;
-    letter-spacing: 0.08em;
 }
 
 .subnav {
@@ -176,6 +192,7 @@ body {
     letter-spacing: 0.06em;
     color: #999999;
     text-decoration: none;
+    white-space: nowrap; /* tabs stay one line; the bar scrolls sideways on narrow screens instead */
 }
 
 .subnav span.active,
@@ -184,10 +201,8 @@ body {
     color: var(--text-primary);
 }
 
-
 .subnav a:hover {
     color: var(--accent-amber);
-
 
 }
 
@@ -207,19 +222,13 @@ body {
     letter-spacing: 0.06em;
 }
 
-
 /* ============================================================
    LANDING PAGE — HERO
    ============================================================ */
 
 .image-container {
-    max-height: 300px;
-    overflow: hidden;
-}
-
-.image-container {
     position: relative;
-    height: 200px;
+    height: clamp(260px, 45vh, 460px);
     overflow: hidden;
     border-bottom: 1px solid #e0e0e0;
     background: #222;
@@ -248,13 +257,14 @@ body {
     font-family: var(--mono);
     letter-spacing: 0.06em;
     font-size: 10px;
-    padding: 6px 10px;
+    padding: 24px 28px;
+    max-width: 640px;
     color: #ffffff;
     z-index: 2;
 }
 
 .eyebrow {
-    font-size: 9px;
+    font-size: 11px;
     font-family: var(--mono);
     color: rgba(255, 255, 255, 0.45);
     letter-spacing: 0.08em;
@@ -265,7 +275,7 @@ body {
     font-family: var(--mono);
     color: white;
     letter-spacing: 0.06em;
-    font-size: 26px;
+    font-size: clamp(26px, 4vw, 40px);
 }
 
 .description {
@@ -275,180 +285,6 @@ body {
     font-size: 15px;
     line-height: 1.6;
 }
-
-
-/* ============================================================
-   LANDING PAGE — QUICK-LOOK STATS BAR
-   ============================================================ */
-
-.quick-look {
-    display: flex;
-    background: #1C1A14;
-    color: #C9C2AD;
-    font-family: var(--mono);
-}
-
-.look-label {
-    display: flex;
-    align-items: center;
-    border-right: 1px solid #2A2720;
-    padding: 18px 18px;
-}
-
-.quick-look-stat {
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid #2A2720;
-    padding: 10px;
-}
-
-.stat-label {
-    font-size: 12px;
-    color: #463E2F;
-}
-
-.stat-value {
-    font-size: 15px;
-    color: #C9C2AD;
-}
-
-.danger {
-    color: #C04A3A;
-}
-
-.highlight {
-    color: #826112;
-}
-
-
-/* ============================================================
-   LANDING PAGE — ADVISORY STRIP
-   ============================================================ */
-
-.advisory-strip {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    overflow-x: auto;
-}
-
-.advisory-strip-label {
-    font-size: 9px;
-    letter-spacing: 0.14em;
-    color: var(--text-muted);
-    font-family: var(--mono);
-    text-transform: uppercase;
-    padding: 7px 16px;
-    border-right: 1px solid var(--border);
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.advisory-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 16px;
-    border-right: 1px solid var(--border-faint);
-    flex-shrink: 0;
-}
-
-.advisory-item-text {
-    font-size: 10px;
-    color: var(--text-secondary);
-    font-family: var(--mono);
-}
-
-.adv-badge {
-    font-size: 9px;
-    padding: 2px 6px;
-    border-radius: 2px;
-    letter-spacing: 0.06em;
-    font-family: var(--mono);
-    display: inline-block;
-}
-
-.adv-danger {
-    background: #FCEBEB;
-    color: #791F1F;
-    border: 1px solid #F7C1C1;
-}
-
-.adv-warn {
-    background: #FAEEDA;
-    color: #633806;
-    border: 1px solid #FAC775;
-}
-
-.adv-info {
-    background: #E6F1FB;
-    color: #0C447C;
-    border: 1px solid #B5D4F4;
-}
-
-
-/* ============================================================
-   LANDING PAGE — GEOLOGICAL ERA STRIP
-   ============================================================ */
-
-.geographic-strip {
-    display: flex;
-    justify-content: space-between;
-    background: #F4F0E8;
-    padding: 8px 20px;
-    border: 1px solid #e0e0e0;
-    font: var(--mono);
-    color: #AA9C87;
-    font-size: 13px;
-}
-
-.era-strip {
-    display: flex;
-    background-color: #FAF8F3;
-}
-
-.era-card {
-    flex: 1;
-    display: flex;
-    padding: 0 10px 10px 10px;
-    flex-direction: column;
-    border-right: 1px solid #DDD8CA;
-    font-family: var(--serif);
-    min-height: 120px;
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-}
-
-.era-card:hover .era-name {
-    color: var(--accent-amber);
-}
-
-.era-bar {
-    height: 3px;
-    width: 100%;
-}
-
-.era-name {
-    padding-left: 10px;
-    font-weight: bold;
-    font-size: 16px;
-    font-family: var(--serif);
-}
-
-.era-number {
-    padding-left: 10px;
-    color: #A8988E;
-    font-family: var(--mono);
-}
-
-.era-description {
-    padding-left: 10px;
-    color: #6B6756;
-    font-size: 13px;
-}
-
 
 /* ============================================================
    LANDING PAGE — FEATURED ARTICLE, CHANGELOG & SIDEBAR
@@ -477,10 +313,13 @@ body {
     border-bottom: 1px solid #DDD8CA;
 }
 
+/* stacked: image spans the column, text sits underneath */
 .feature-link {
     text-decoration: none;
     color: inherit;
     display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .feature-container:has(.feature-link:hover) {
@@ -489,28 +328,30 @@ body {
 
 .feature-container {
     display: flex;
-    padding: 15px;
+    padding: 20px;
 }
 
-.feature-link {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-}
-
-
-
-.feature-img img {
-    width: 160px;
-    object-fit: contain;
+.feature-img {
+    background: #F4F0E8;
     border: 1px solid #DDD8CA;
     border-radius: 4px;
+}
+
+/* max-width/max-height rather than width:100% so small images are never upscaled into blur */
+.feature-img img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    max-height: 380px;
+    width: auto;
+    height: auto;
 }
 
 .feature-text {
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    gap: 4px;
+    padding: 14px 4px 0;
 }
 
 .category-text {
@@ -521,7 +362,7 @@ body {
 .common-name {
     font-family: var(--serif);
     color: black;
-    font-size: 15px;
+    font-size: 22px;
     font-weight: 500;
 }
 
@@ -533,64 +374,9 @@ body {
 }
 
 .featured-desc {
-    font-size: 12px;
+    font-size: 14px;
     color: #5c5546;
     line-height: 1.65;
-}
-
-.entry-details {
-    color: #9F9887;
-    letter-spacing: 2px;
-}
-
-.log {
-    padding: 12px 14px;
-    border-top: 1px solid #DDD8CA;
-}
-
-.log-label {
-    font-family: var(--serif);
-    font-size: 13px;
-    letter-spacing: 0.12em;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-}
-
-.log-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px 0;
-    border-bottom: 1px solid #F4F0E8;
-}
-
-.log-badge {
-    font-size: 9px;
-    padding: 2px 6px;
-    border-radius: 2px;
-    letter-spacing: 0.06em;
-    font-family: var(--mono);
-    display: inline-block;
-}
-
-.log-added {
-    background: #E8F7F2;
-    color: #1D9E75;
-    border: 1px solid #A3DCC8;
-}
-
-.log-revised {
-    background: #FEF3E2;
-    padding: 2px 6px;
-    color: #c27b12;
-    border: 1px solid #FAC775;
-}
-
-.log-updated {
-    background: #EEEDF9;
-    padding: 2px 6px;
-    color: #534AB7;
-    border: 1px solid #C4C1EC;
 }
 
 .sidebar {
@@ -626,15 +412,6 @@ body {
     color: #9c9080;
 }
 
-.sidebar-subhead {
-    font-family: var(--serif);
-    font-size: 12px;
-    color: var(--text-muted);
-    margin: 12px 0 4px;
-    padding-bottom: 3px;
-    border-bottom: 1px solid var(--border);
-}
-
 .sidebar-cat-dot {
     width: 6px;
     height: 6px;
@@ -658,7 +435,6 @@ body {
     font-family: var(--mono);
     font-size: 10px;
 }
-
 
 /* ============================================================
    ENTRY PAGE  (entry.php — detail template)
@@ -736,12 +512,6 @@ a.entry-tag:hover {
     color: var(--accent-amber);
 }
 
-.extinct-tag.extant {
-    background: #ece9e4;
-    color: #6b6258;
-    border-color: #cfc8bd;
-}
-
 .faceplate {
     display: block;
     width: 100%;
@@ -778,15 +548,6 @@ a.entry-tag:hover {
     border-top: 1px solid var(--border);
 }
 
-.faceplate-caption-sci {
-    font-family: var(--serif);
-    letter-spacing: 0.12em;
-    font-size: 10px;
-    margin-bottom: 8px;
-    font-style: italic;
-    color: #9F9887;
-}
-
 .faceplate-caption-meta {
     font-family: var(--mono);
     letter-spacing: 0.12em;
@@ -795,12 +556,6 @@ a.entry-tag:hover {
     text-align: right;
     text-transform: uppercase;
     color: #9F9887;
-}
-
-.faceplate-caption-name {
-    font-family: var(--serif);
-    font-size: 14px;
-    font-weight: 700;
 }
 
 /* credit line under a faceplate borrowed from (or shared with) a plate */
@@ -830,11 +585,16 @@ a.entry-tag:hover {
     background: #f8f5ee;
 }
 
+/* no sidebar boxes to show: the article takes the whole width, kept to a readable line length */
+.entry-body-full {
+    grid-template-columns: minmax(0, 760px);
+}
+
 .entry-lede {
     font-family: var(--serif);
     border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    line-height: 1.7;
+    font-size: 16px;
+    line-height: 1.75;
     margin-bottom: 28px;
     padding-bottom: 18px;
 }
@@ -857,8 +617,8 @@ a.entry-tag:hover {
 
 .body-text {
     font-family: var(--serif);
-    font-size: 13px;
-    line-height: 1.75;
+    font-size: 16px; /* reading size: the content is the point of the page */
+    line-height: 1.8;
     color: var(--text-primary);
     margin-bottom: 14px;
 }
@@ -938,7 +698,6 @@ a.entry-tag:hover {
     color: var(--text-primary);
     text-align: right;
 }
-
 
 /* ============================================================
    FAUNA — PHYLUM LEDGER  (fauna.php)
@@ -1040,18 +799,6 @@ a.entry-tag:hover {
 }
 
 /* --- "access record" cue (dim, ignites amber on row hover) --- */
-
-.phylum-cue {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: #c9bfa8;
-    flex-shrink: 0;
-    padding: 0 22px;
-}
-
-.phylum-row:hover .phylum-cue {
-    color: var(--accent-amber);
-}
 
 /* ============================================================
    CLADOGRAM  (cladogram.php — shared panel on fauna/flora/tapetae)
@@ -1185,15 +932,13 @@ a.entry-tag:hover {
     padding: 7px 14px;
 }
 
-
-/* ============================================================
-   MISC / UNCATEGORIZED
-   ============================================================ */
-
-
 /* ============================================================
    SEARCH RESULTS  (search.php)
    ============================================================ */
+
+.search-page {
+    padding: 20px;
+}
 
 .search-page h2 {
     font-family: var(--serif);
@@ -1246,7 +991,6 @@ a.entry-tag:hover {
 .search-result:hover .search-result-name {
     color: var(--accent-amber);
 }
-
 
 /*===========================ADMIN FORM STUFF
  =======================================*/
@@ -1376,12 +1120,6 @@ a.entry-tag:hover {
 .admin-switch a.active {
     color: var(--accent-amber);
     border-bottom-color: var(--accent-amber);
-}
-
-.admin-switch-soon {
-    margin-left: auto;
-    color: var(--text-muted);
-    font-size: 11px;
 }
 
 .admin-switch select {
@@ -1670,4 +1408,761 @@ a.hotspot-marker-numbered:hover {
 
 .edit-link:hover {
     color: var(--accent-amber);
+}
+
+/* ============================================================
+   ENTRY PAGE — SIDEBAR, CHILD GRID
+   ============================================================ */
+
+.entry-sidebar {
+    padding: 20px 20px 20px 0;
+}
+
+/* classification rows link up the tree */
+a.info-value {
+    text-decoration: none;
+}
+
+a.info-value:hover {
+    color: var(--accent-amber);
+}
+
+/* "Contains" / "Species" on a taxon entry: a grid of small cards */
+
+/* ============================================================
+   PLATES INDEX — IMAGE GRID  (plates.php)
+   ============================================================ */
+
+.plate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+}
+
+.plate-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-faint);
+    background: #fefdfb;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+}
+
+.plate-card:hover {
+    border-color: var(--accent-amber);
+}
+
+.plate-card:hover .phylum-name {
+    color: var(--accent-amber);
+}
+
+/* fixed-ratio window; plates are ~2048px wide so cover-cropping them never upscales */
+.plate-card-img {
+    aspect-ratio: 16 / 9;
+    background: #222;
+    overflow: hidden;
+}
+
+.plate-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.plate-card:hover .plate-card-img img {
+    transform: scale(1.03);
+}
+
+.plate-card-bar {
+    height: 3px;
+}
+
+.plate-card-body {
+    padding: 12px 16px 14px;
+}
+
+/* ============================================================
+   LANDING PAGE — HERO BUTTONS, LATEST PLATES, START HERE
+   ============================================================ */
+
+/* quiet text links under the hero description, same voice as the eyebrow */
+.hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-top: 12px;
+}
+
+.hero-links a {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #E8DFC8;
+    border-bottom: 1px solid rgba(232, 223, 200, 0.3);
+    padding-bottom: 2px;
+}
+
+.hero-links a:hover {
+    color: var(--accent-amber);
+    border-bottom-color: var(--accent-amber);
+}
+
+/* "All plates →" on the right of a .feature-title bar */
+.feature-title-link {
+    color: var(--accent-amber);
+    text-decoration: none;
+}
+
+.feature-title-link:hover {
+    text-decoration: underline;
+}
+
+/* three-up version of the plates grid for the homepage column */
+.plate-grid-compact {
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.plate-grid-compact .phylum-name {
+    font-size: 15px;
+}
+
+.plate-grid-compact .phylum-desc {
+    font-size: 12px;
+}
+
+/* ============================================================
+   WORLD PAGE  (world.php)
+   ============================================================ */
+
+/* --- system illustration (world.php hero) --- */
+
+/* the source image has white bands baked in top and bottom (rows 0-26 and 1080-1137 of 1137).
+   the frame's ratio matches the artwork without them, and object-position lines the crop up
+   so only the bands fall outside: 26px of the 83px trimmed comes off the top = 31% */
+.system-figure {
+    aspect-ratio: 2000 / 1054;
+    overflow: hidden;
+    background: #0b0b0d;
+    border-bottom: 1px solid var(--border);
+}
+
+.system-figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 31%;
+    display: block;
+}
+
+/* the surveyed world's row in the system table */
+.info-row.is-home .info-key,
+.info-row.is-home .info-value {
+    color: var(--accent-amber);
+}
+
+/* planet close-up at the top of an info box */
+/* square window onto the right-hand (planet) part of a wider reference sheet.
+   object-position x: the sheet is 2000x1137, the planet is centred near x=1300,
+   so the square's left edge sits ~730px in = 730 / (2000 - 1137) ≈ 85% */
+.info-box-img {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #0b0b0d;
+    border-bottom: 1px solid var(--border);
+}
+
+.info-box-img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 85% 50%;
+}
+
+.system-table {
+    margin-bottom: 14px;
+}
+
+/* era colour swatch on a Timeline chapter heading */
+.era-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+/* --- in-place editing (only when logged in; see site-text.php + footer.php) --- */
+
+.is-editable {
+    position: relative;
+    outline: 1px dashed transparent;
+    outline-offset: 4px;
+    transition: outline-color 0.15s ease;
+}
+
+.is-editable:hover {
+    outline-color: var(--border);
+}
+
+.edit-pen {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 5;
+}
+
+.is-editable:hover .edit-pen {
+    opacity: 1;
+}
+
+.edit-pen:hover {
+    color: var(--accent-amber);
+    border-color: var(--accent-amber);
+}
+
+/* touch screens have no hover: keep the pen visible */
+@media (hover: none) {
+    .edit-pen {
+        opacity: 0.8;
+    }
+}
+
+.is-editing .edit-pen {
+    display: none;
+}
+
+.edit-field {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--accent-amber);
+    background: #fffdf8;
+    font-family: var(--serif);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    resize: vertical;
+}
+
+.edit-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0 12px;
+}
+
+.edit-bar button {
+    padding: 5px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.edit-bar .edit-save {
+    background: var(--accent-amber);
+    border-color: var(--accent-amber);
+    color: #ffffff;
+}
+
+.edit-hint {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+/* the hero text sits on a dark image: give its editor a light field */
+.text-overlay .edit-field {
+    font-family: var(--mono);
+}
+
+/* empty frame holding the biome map's place until the image exists (only shown when logged in) */
+.map-slot {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    border: 2px dashed var(--border);
+    background: #f8f5ee;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+/* unwritten dossier sections: visibly a stub, not real copy */
+.placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+    border-left: 2px dashed var(--border);
+    padding-left: 12px;
+}
+
+/* ============================================================
+   ENTRY PAGE — SLIM CAPTION, STUB NOTE, ARTICLE META LINE
+   ============================================================ */
+
+.faceplate-caption-slim {
+    align-items: center;
+}
+
+.faceplate-caption-slim .faceplate-caption-meta {
+    margin-bottom: 0;
+}
+
+.plate-credit-inline {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.plate-credit-inline a {
+    color: var(--accent-amber);
+    text-decoration: none;
+}
+
+.plate-credit-inline a:hover {
+    text-decoration: underline;
+}
+
+.entry-stub {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--text-muted);
+    border-left: 2px dashed var(--border);
+    padding-left: 12px;
+    margin-bottom: 14px;
+}
+
+/* entry code · first described · lead · edited, closing the article */
+.entry-meta {
+    margin-top: 28px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: baseline;
+}
+
+.entry-meta .edit-link {
+    margin-left: auto;
+}
+
+/* ============================================================
+   ADMIN — ENTRY LIST, ACTIONS, OWN-IMAGE BOX  (admin.php)
+   ============================================================ */
+
+.admin-list-filter {
+    display: block;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto 10px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    background: #fefdfb;
+    font-family: var(--mono);
+    font-size: 12px;
+}
+
+.admin-list {
+    max-width: 900px;
+    margin: 0 auto 24px;
+    border: 1px solid var(--border-faint);
+    background: #fefdfb;
+}
+
+.admin-list-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 160px 90px 40px;
+    gap: 12px;
+    align-items: center;
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--border-faint);
+}
+
+.admin-list-row:hover {
+    background: #faf2e4;
+}
+
+.admin-list-type {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 2px 6px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+}
+
+.admin-list-type-species { background: #E8F7F2; color: #1D9E75; border-color: #A3DCC8; }
+.admin-list-type-plate   { background: #FEF3E2; color: #c27b12; border-color: #FAC775; }
+.admin-list-type-taxon   { background: #EEEDF9; color: #534AB7; border-color: #C4C1EC; }
+
+.admin-list-name {
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.admin-list-name:hover {
+    color: var(--accent-amber);
+}
+
+.admin-list-sub {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.admin-list-date,
+.admin-list-view {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.admin-list-view:hover {
+    color: var(--accent-amber);
+}
+
+.admin-msg a {
+    color: var(--accent-amber);
+}
+
+.admin-msg-note {
+    color: var(--text-muted);
+}
+
+/* Save · View entry · Delete, under the compose block */
+.admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    max-width: 1040px;
+    margin: 0 auto;
+}
+
+.admin-view-link {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.admin-view-link:hover {
+    color: var(--accent-amber);
+}
+
+.admin-form button.admin-delete {
+    margin-left: auto;
+    background: none;
+    color: #b3412e;
+    border: 1px solid #e3b4aa;
+}
+
+.admin-form button.admin-delete:hover {
+    background: #b3412e;
+    color: #ffffff;
+}
+
+/* --- searchable picker (replaces filter box + long <select>) --- */
+
+/* info boxes normally clip their contents (overflow: hidden); in admin, a picker's list
+   has to hang out past the box edge, so those boxes let it */
+.admin-form .info-box {
+    overflow: visible;
+}
+
+/* hex colour field: typed #RRGGBB with a live swatch beside it */
+.hex-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hex-swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.admin-form .hex-field .compose-side {
+    width: 80px;
+    text-transform: uppercase;
+    border-bottom: 1px dashed var(--border);
+}
+
+.admin-form .hex-field .compose-side:invalid {
+    color: #b3412e;
+    border-bottom-color: #b3412e;
+}
+
+.picker {
+    position: relative;
+    width: 62%;
+}
+
+.admin-form .picker .picker-input {
+    width: 100%;
+    max-width: none;
+    border-bottom: 1px dashed var(--border);
+    cursor: pointer;
+}
+
+.admin-form .picker .picker-input:focus {
+    outline: none;
+    border-bottom-color: var(--accent-amber);
+    cursor: text;
+}
+
+.picker-list {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    width: 280px;
+    max-height: 280px;
+    overflow-y: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 6px 18px rgba(28, 26, 20, 0.12);
+    z-index: 20;
+    text-align: left;
+}
+
+.picker.is-open .picker-list {
+    display: block;
+}
+
+.picker-item {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-faint);
+}
+
+.picker-item:hover,
+.picker-item.is-current {
+    background: #faf2e4;
+}
+
+.picker-name {
+    font-family: var(--serif);
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+.picker-sub,
+.plate-subject-sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+}
+
+.picker-none {
+    padding: 8px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* --- plate subjects: ticked items + search results only --- */
+
+.subject-search {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    background: #fefdfb;
+    font-family: var(--mono);
+    font-size: 11px;
+}
+
+.plate-subject-list {
+    max-height: 320px;
+}
+
+.plate-subject-group {
+    padding: 8px 12px 2px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.plate-subject-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.plate-subject-name {
+    font-family: var(--serif);
+    font-size: 12px;
+}
+
+.plate-subject-row.is-ticked .plate-subject-name {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+/* un-placed pins stay faint; placed ones are full strength */
+.hotspot-place-btn {
+    opacity: 0.35;
+}
+
+.hotspot-place-btn.is-placed,
+.hotspot-place-btn:hover {
+    opacity: 1;
+}
+
+.plate-subject-empty {
+    padding: 10px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* the folded-away own-image upload on taxon/species forms */
+.admin-image-box summary {
+    cursor: pointer;
+    list-style: none;
+}
+
+.admin-image-box summary::after {
+    content: " +";
+}
+
+.admin-image-box[open] summary::after {
+    content: " –";
+}
+
+.admin-image-hint,
+.admin-image-remove {
+    font-size: 11px;
+    color: var(--text-muted);
+    gap: 6px;
+    justify-content: flex-start;
+}
+
+/* ============================================================
+   RESPONSIVE — tablets and phones
+   kept at the end so it overrides everything above
+   ============================================================ */
+
+@media (max-width: 900px) {
+    body {
+        padding: 10px;
+    }
+
+    /* topbar: no room to centre, so logo left and search takes the rest of the row */
+    .topbar {
+        grid-template-columns: auto 1fr;
+    }
+
+    /* every main + sidebar layout stacks */
+    .body,
+    .entry-body {
+        grid-template-columns: 1fr;
+    }
+
+    .main {
+        border-right: none;
+    }
+
+    .entry-sidebar {
+        padding: 0 20px 20px;
+    }
+}
+
+@media (max-width: 560px) {
+    /* phone: logo on top, search full width underneath */
+    .topbar {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .entry-main-text {
+        padding: 16px;
+    }
+
+    .entry-title {
+        font-size: 22px;
+    }
+
+    .faceplate-caption {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .faceplate-caption-meta {
+        text-align: left;
+    }
+
+    /* ledger rows: drop the "View →" cue, the whole row is already the link */
+
+    .plate-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* admin list: type + name only on a phone */
+    .admin-list-row {
+        grid-template-columns: 60px 1fr 36px;
+    }
+
+    .admin-list-sub,
+    .admin-list-date {
+        display: none;
+    }
+
+    .footer {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+    }
 }
